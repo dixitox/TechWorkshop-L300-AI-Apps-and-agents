@@ -39,9 +39,9 @@ jobs:
           echo "${{ secrets.ENV }}" > src/.env
       
       - name: Deploy Interior Design Agent
-        working-directory: src/app/agents
+        working-directory: src
         run: |
-          python interiorDesignAgent_initializer.py
+          python app/agents/interiorDesignAgent_initializer.py
       
       - name: Clean up .env file
         if: always()

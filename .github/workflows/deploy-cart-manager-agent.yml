@@ -43,7 +43,9 @@ jobs:
         working-directory: src
         shell: bash
         run: |
-          export $(grep -v '^#' .env | xargs -d '\n')
+          set -a
+          source .env
+          set +a
           python app/agents/cartManagerAgent_initializer.py
       
       - name: Clean up .env file

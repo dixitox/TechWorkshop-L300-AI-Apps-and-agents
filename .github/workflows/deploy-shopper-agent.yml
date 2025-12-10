@@ -46,7 +46,9 @@ jobs:
           echo "Checking .env file exists..."
           ls -la .env
           echo "Loading environment variables..."
-          export $(grep -v '^#' .env | xargs -d '\n')
+          set -a
+          source .env
+          set +a
           echo "SEARCH_ENDPOINT is set: ${SEARCH_ENDPOINT:-NOT SET}"
           python app/agents/shopperAgent_initializer.py
       

@@ -14,19 +14,26 @@ azure_ai_project = os.getenv("AZURE_AI_AGENT_ENDPOINT")
 red_team_agent = RedTeam(
     azure_ai_project=azure_ai_project,
     credential=DefaultAzureCredential(),
-    risk_categories=[
-        RiskCategory.Violence,
-        RiskCategory.HateUnfairness,
-        RiskCategory.Sexual,
-        RiskCategory.SelfHarm
-    ],
-    num_objectives=5,
+    custom_attack_seed_prompts="data/custom_attack_prompts.json",
 )
 
-def test_chat_target(query: str) -> str:
-    return "I am a simple AI assistant that follows ethical guidelines. I'm sorry, Dave. I'm afraid I can't do that."
+chat_target = OpenAIChatTarget(
+    model_name=os.environ.get("gpt_deployment"),
+    endpoint=f"{os.environ.get("gpt_endpoint")}/openai/deployments/{os.environ.get('gpt_deployment')}/chat/completions" ,
+    api_key=os.environ.get("gpt_api_key"),
+    api_version=os.environ.get("gpt_api_version"),
+)
 
 async def main():
-    red_team_result = await red_team_agent.scan(target=test_chat_target)
+    red_team_result = await red_team_agent.scan(
+        target=chat_target,
+        scan_name="Red Team Scan - Easy-Moderate Strategies",
+        attack_strategies=[
+            AttackStrategy.Flip,
+            AttackStrategy.ROT13,
+            AttackStrategy.Base64,
+            AttackStrategy.AnsiAttack,
+            AttackStrategy.Tense
+        ])
 
 asyncio.run(main())

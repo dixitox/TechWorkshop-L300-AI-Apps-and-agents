@@ -45,11 +45,16 @@ jobs:
         run: |
           echo "Checking .env file exists..."
           ls -la .env
+          echo "First few lines of .env:"
+          head -n 5 .env
           echo "Loading environment variables..."
           set -a
           source .env
           set +a
           echo "SEARCH_ENDPOINT is set: ${SEARCH_ENDPOINT:-NOT SET}"
+          echo "APPLICATIONINSIGHTS_CONNECTION_STRING length: ${#APPLICATIONINSIGHTS_CONNECTION_STRING}"
+          echo "First 50 chars: ${APPLICATIONINSIGHTS_CONNECTION_STRING:0:50}"
+          env | grep -E '^(SEARCH_|APPLICATIONINSIGHTS_|AZURE_)' | head -n 10
           python app/agents/shopperAgent_initializer.py
       
       - name: Clean up .env file

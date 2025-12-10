@@ -36,7 +36,9 @@ jobs:
       
       - name: Create .env file
         run: |
-          echo "${{ secrets.ENV }}" > src/.env
+          cat > src/.env << 'EOF'
+          ${{ secrets.ENV }}
+          EOF
       
       - name: Deploy Customer Loyalty Agent
         working-directory: src

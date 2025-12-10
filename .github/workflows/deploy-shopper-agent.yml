@@ -39,10 +39,13 @@ jobs:
       
       - name: Deploy Shopper Agent
         working-directory: src
+        shell: bash
         run: |
-          set -a
-          source .env
-          set +a
+          echo "Checking .env file exists..."
+          ls -la .env
+          echo "Loading environment variables..."
+          export $(grep -v '^#' .env | xargs -d '\n')
+          echo "SEARCH_ENDPOINT is set: ${SEARCH_ENDPOINT:-NOT SET}"
           python app/agents/shopperAgent_initializer.py
       
       - name: Clean up .env file

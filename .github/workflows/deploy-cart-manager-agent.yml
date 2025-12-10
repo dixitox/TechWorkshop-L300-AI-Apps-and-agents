@@ -39,10 +39,9 @@ jobs:
       
       - name: Deploy Cart Manager Agent
         working-directory: src
+        shell: bash
         run: |
-          set -a
-          source .env
-          set +a
+          export $(grep -v '^#' .env | xargs -d '\n')
           python app/agents/cartManagerAgent_initializer.py
       
       - name: Clean up .env file

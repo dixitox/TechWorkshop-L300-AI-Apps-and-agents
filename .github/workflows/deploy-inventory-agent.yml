@@ -41,6 +41,9 @@ jobs:
       - name: Deploy Inventory Agent
         working-directory: src
         run: |
+          set -a
+          source .env
+          set +a
           python app/agents/inventoryAgent_initializer.py
       
       - name: Clean up .env file
